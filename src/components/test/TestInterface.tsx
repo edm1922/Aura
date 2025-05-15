@@ -131,7 +131,10 @@ export default function TestInterface({
 
           // Check if the questions are unique (not duplicates)
           const questionTexts = data.nextQuestions.map((q: Question) => q.text);
-          const uniqueQuestionTexts = [...new Set(questionTexts)];
+          // Use Array.filter for uniqueness instead of Set spread
+          const uniqueQuestionTexts = questionTexts.filter((text, index, self) =>
+            self.indexOf(text) === index
+          );
 
           if (uniqueQuestionTexts.length < questionTexts.length) {
             console.log('Warning: Received duplicate questions from API');
