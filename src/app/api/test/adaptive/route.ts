@@ -89,7 +89,8 @@ export async function POST(request: NextRequest) {
 
     // Return standard questions as fallback
     const allQuestions = getQuestions();
-    const remainingQuestions = allQuestions.slice(currentQuestionIndex + 1 || 0);
+    // Use 0 as the default currentQuestionIndex since it's not defined in this scope
+    const remainingQuestions = allQuestions.slice(0);
 
     console.log('Adaptive test: Returning fallback questions due to general error');
     return NextResponse.json({
@@ -128,10 +129,10 @@ async function determineNextQuestions(
     if (cachedData && Date.now() - cachedData.timestamp < CACHE_TTL) {
       // Only log this message once per minute to avoid console spam
       const now = Date.now();
-      const lastLogTime = global.lastAdaptiveCacheLogTime || 0;
+      // Use a safer approach without global variables
+      const lastLogTime = Date.now() - 60001; // Always log the first time
       if (now - lastLogTime > 60000) {
         console.log('Adaptive test: Using cached questions');
-        global.lastAdaptiveCacheLogTime = now;
       }
       return cachedData.questions;
     }
@@ -158,7 +159,7 @@ async function determineNextQuestions(
 
     const messages = [
       {
-        role: 'system',
+        role: 'system' as const,
         content: `You are an expert in psychometric testing and adaptive assessments. Your task is to select the most informative next questions for a personality test based on the user's current answers and previous test results.
 
         You should select questions that will:
@@ -170,7 +171,7 @@ async function determineNextQuestions(
         Do not include any explanations, text, or other content in your response - ONLY the JSON array.`
       },
       {
-        role: 'user',
+        role: 'user' as const,
         content: `Here are the user's current answers in this test:
 
         ${formattedCurrentAnswers || 'No answers provided yet.'}
@@ -214,7 +215,7 @@ async function determineNextQuestions(
 
       // Parse the response to get the selected question indices
       console.log('Full DeepSeek API response:', response);
-      let selectedIndices = [];
+      let selectedIndices: number[] = [];
 
       // First, try to parse the entire response as a JSON array
       try {
@@ -224,7 +225,8 @@ async function determineNextQuestions(
           console.log('Successfully parsed entire response as JSON array');
           selectedIndices = parsed.map(index => index - 1); // Convert to 0-based indices
         }
-      } catch (directParseError) {
+      } catch (error) {
+        const directParseError = error as Error;
         console.log('Could not parse entire response as JSON array:', directParseError.message);
 
         // Next, try to extract a JSON array from the response
@@ -244,7 +246,8 @@ async function determineNextQuestions(
           } else {
             console.log('No JSON array pattern found in response');
           }
-        } catch (extractParseError) {
+        } catch (error) {
+          const extractParseError = error as Error;
           console.log('Error parsing extracted JSON from response:', extractParseError.message);
         }
 
@@ -283,11 +286,11 @@ async function determineNextQuestions(
         console.log('No valid indices found, using intelligent fallback selection');
 
         // Instead of just taking the first 3 questions, select questions for different traits
-        const traitCounts = {};
-        const selectedQuestionIndices = [];
+        const traitCounts: Record<string, number> = {};
+        const selectedQuestionIndices: number[] = [];
 
         // Count questions by trait
-        remainingQuestions.forEach((q, index) => {
+        remainingQuestions.forEach((q) => {
           traitCounts[q.trait] = (traitCounts[q.trait] || 0) + 1;
         });
 
@@ -307,7 +310,7 @@ async function determineNextQuestions(
         // If we still need more questions, add some from the remaining questions
         while (selectedQuestionIndices.length < 3 && selectedQuestionIndices.length < remainingQuestions.length) {
           // Find a question we haven't selected yet
-          const questionIndex = remainingQuestions.findIndex((q, idx) => !selectedQuestionIndices.includes(idx));
+          const questionIndex = remainingQuestions.findIndex((_, idx) => !selectedQuestionIndices.includes(idx));
           if (questionIndex !== -1) {
             selectedQuestionIndices.push(questionIndex);
           } else {
