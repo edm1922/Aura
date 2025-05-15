@@ -21,14 +21,20 @@ async function main() {
     log(`Building for ${isProd ? 'production' : 'development'} environment`);
     log(`Running on ${isVercel ? 'Vercel' : 'local'} environment`);
 
-    // If we're on Vercel, run npm install with --legacy-peer-deps
+    // If we're on Vercel, ensure dependencies are properly installed
     if (isVercel) {
-      log('Installing dependencies with --legacy-peer-deps...');
+      log('Checking dependencies...');
       try {
-        execSync('npm install --legacy-peer-deps', { stdio: 'inherit' });
-        log('Dependencies installed successfully');
+        // Check if node_modules exists
+        if (!fs.existsSync(path.join(process.cwd(), 'node_modules'))) {
+          log('node_modules not found, installing dependencies...');
+          execSync('npm install --legacy-peer-deps', { stdio: 'inherit' });
+          log('Dependencies installed successfully');
+        } else {
+          log('node_modules found, skipping dependency installation');
+        }
       } catch (error) {
-        log('Warning: Failed to install dependencies');
+        log('Warning: Failed to check/install dependencies');
         console.error(error);
       }
     }
