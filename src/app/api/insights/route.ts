@@ -42,11 +42,15 @@ export async function POST(request: NextRequest) {
       // Format the answers for the AI
       const formattedAnswers = Array.isArray(testResult.answers)
         ? testResult.answers
-            .filter(answer => answer !== null && answer !== undefined)
+            .filter((answer): answer is Record<string, any> =>
+              answer !== null &&
+              answer !== undefined &&
+              typeof answer === 'object'
+            )
             .map(answer => ({
-              questionText: answer?.questionText || 'Question',
-              answerText: answer?.answerText || 'Answer',
-              answerValue: answer?.answerValue || 3,
+              questionText: answer.questionText || 'Question',
+              answerText: answer.answerText || 'Answer',
+              answerValue: answer.answerValue || 3,
             }))
         : [];
 
