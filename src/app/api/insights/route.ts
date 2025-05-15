@@ -40,11 +40,11 @@ export async function POST(request: NextRequest) {
       }
 
       // Format the answers for the AI
-      const formattedAnswers = testResult.answers.map(answer => ({
+      const formattedAnswers = testResult.answers?.map(answer => ({
         questionText: answer.questionText || 'Question',
         answerText: answer.answerText || 'Answer',
         answerValue: answer.answerValue || 3,
-      }));
+      })) || [];
 
       // Generate insights using DeepSeek API
       const insights = await deepseekApi.generatePersonalityInsights(
