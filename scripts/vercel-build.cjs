@@ -21,6 +21,18 @@ async function main() {
     log(`Building for ${isProd ? 'production' : 'development'} environment`);
     log(`Running on ${isVercel ? 'Vercel' : 'local'} environment`);
 
+    // If we're on Vercel, run npm install with --legacy-peer-deps
+    if (isVercel) {
+      log('Installing dependencies with --legacy-peer-deps...');
+      try {
+        execSync('npm install --legacy-peer-deps', { stdio: 'inherit' });
+        log('Dependencies installed successfully');
+      } catch (error) {
+        log('Warning: Failed to install dependencies');
+        console.error(error);
+      }
+    }
+
     // IMPORTANT: Only run migrations automatically on Vercel production builds
     // This prevents accidental migrations during local development
     if (isProd && isVercel && process.env.DATABASE_URL) {
