@@ -4,22 +4,22 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { useTheme } from '@/context/ThemeContext'
 import { Achievement } from '@/lib/progressTracker'
-import { 
+import {
   AcademicCapIcon,
   BeakerIcon,
   CalendarIcon,
   ChartBarIcon,
-  ClipboardCheckIcon,
-  ClipboardListIcon,
+  ClipboardIcon, // Updated from ClipboardCheckIcon
+  ClipboardDocumentIcon, // Updated from ClipboardListIcon
   ClockIcon,
-  CollectionIcon,
-  EmojiHappyIcon,
+  SquaresPlusIcon, // Updated from CollectionIcon
+  FaceSmileIcon, // Updated from EmojiHappyIcon
   FireIcon,
   LightBulbIcon,
   ScaleIcon,
   ShareIcon,
   StarIcon,
-  TrendingUpIcon,
+  ArrowTrendingUpIcon, // Updated from TrendingUpIcon
   UserCircleIcon,
   UsersIcon,
   LockClosedIcon
@@ -39,17 +39,17 @@ const iconMap: Record<string, React.ReactNode> = {
   'beaker': <BeakerIcon />,
   'calendar': <CalendarIcon />,
   'chart-bar': <ChartBarIcon />,
-  'clipboard-check': <ClipboardCheckIcon />,
-  'clipboard-list': <ClipboardListIcon />,
+  'clipboard-check': <ClipboardIcon />, // Updated
+  'clipboard-list': <ClipboardDocumentIcon />, // Updated
   'clock': <ClockIcon />,
-  'collection': <CollectionIcon />,
-  'emoji-happy': <EmojiHappyIcon />,
+  'collection': <SquaresPlusIcon />, // Updated
+  'emoji-happy': <FaceSmileIcon />, // Updated
   'fire': <FireIcon />,
   'light-bulb': <LightBulbIcon />,
   'scale': <ScaleIcon />,
   'share': <ShareIcon />,
   'star': <StarIcon />,
-  'trending-up': <TrendingUpIcon />,
+  'trending-up': <ArrowTrendingUpIcon />, // Updated
   'user-circle': <UserCircleIcon />,
   'users': <UsersIcon />,
 }
@@ -73,7 +73,7 @@ export default function AchievementBadge({
 }: AchievementBadgeProps) {
   const { theme } = useTheme()
   const [isHovered, setIsHovered] = useState(false)
-  
+
   // Size mapping
   const sizeMap = {
     sm: {
@@ -92,15 +92,15 @@ export default function AchievementBadge({
       font: 'text-base',
     },
   }
-  
+
   // Get category color or use theme primary
   const badgeColor = categoryColors[achievement.category] || theme.primary
-  
+
   // Get icon or use star as fallback
   const icon = iconMap[achievement.icon] || <StarIcon />
-  
+
   return (
-    <div 
+    <div
       className={`flex flex-col items-center ${className}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -118,10 +118,10 @@ export default function AchievementBadge({
           <div className={`text-white ${sizeMap[size].icon}`}>
             {unlocked ? icon : <LockClosedIcon />}
           </div>
-          
+
           {/* Progress indicator (if applicable) */}
           {!unlocked && achievement.progress !== undefined && achievement.maxProgress && (
-            <svg 
+            <svg
               className="absolute inset-0 w-full h-full -rotate-90"
               viewBox="0 0 100 100"
             >
@@ -147,10 +147,10 @@ export default function AchievementBadge({
             </svg>
           )}
         </motion.div>
-        
+
         {/* Unlocked indicator */}
         {unlocked && (
-          <div 
+          <div
             className="absolute -bottom-1 -right-1 bg-green-500 rounded-full p-0.5 border-2 border-white"
           >
             <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -159,14 +159,14 @@ export default function AchievementBadge({
           </div>
         )}
       </div>
-      
+
       {/* Title */}
       {showDetails && (
         <div className={`mt-2 font-medium text-center ${sizeMap[size].font}`}>
           {achievement.title}
         </div>
       )}
-      
+
       {/* Tooltip */}
       {isHovered && !showDetails && (
         <motion.div
@@ -177,13 +177,13 @@ export default function AchievementBadge({
         >
           <div className="font-medium mb-1">{achievement.title}</div>
           <div className="text-gray-600">{achievement.description}</div>
-          
+
           {!unlocked && achievement.progress !== undefined && achievement.maxProgress && (
             <div className="mt-1 text-gray-500">
               Progress: {achievement.progress}/{achievement.maxProgress}
             </div>
           )}
-          
+
           {unlocked && achievement.unlockedAt && (
             <div className="mt-1 text-gray-500">
               Unlocked: {new Date(achievement.unlockedAt).toLocaleDateString()}
