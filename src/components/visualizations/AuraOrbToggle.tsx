@@ -19,6 +19,7 @@ interface AuraOrbToggleProps {
   animated?: boolean
   className?: string
   showToggle?: boolean
+  defaultMode?: string
 }
 
 export default function AuraOrbToggle({
@@ -27,6 +28,7 @@ export default function AuraOrbToggle({
   animated = true,
   className = '',
   showToggle = false, // Default to false since we don't need toggle anymore
+  defaultMode = '3d', // Default to 3D mode
 }: AuraOrbToggleProps) {
   const [isClient, setIsClient] = useState(false)
   const [isLowPerformance, setIsLowPerformance] = useState(false)
