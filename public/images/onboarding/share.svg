@@ -1,0 +1,10 @@
+<svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" fill="#f0f9ff" />
+  <circle cx="140" cy="150" r="30" fill="#93c5fd" />
+  <circle cx="260" cy="150" r="30" fill="#93c5fd" />
+  <circle cx="200" cy="80" r="30" fill="#93c5fd" />
+  <line x1="175" y1="95" x2="155" y2="130" stroke="#3b82f6" stroke-width="4" />
+  <line x1="225" y1="95" x2="245" y2="130" stroke="#3b82f6" stroke-width="4" />
+  <line x1="170" y1="150" x2="230" y2="150" stroke="#3b82f6" stroke-width="4" />
+  <text x="200" y="250" font-family="Arial" font-size="24" text-anchor="middle" fill="#1e40af">Share Your Results</text>
+</svg>

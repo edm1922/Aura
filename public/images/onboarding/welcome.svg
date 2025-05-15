@@ -1,0 +1,6 @@
+<svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" fill="#f0f9ff" />
+  <circle cx="200" cy="120" r="60" fill="#93c5fd" />
+  <path d="M200 200 Q 160 160 120 200 Q 160 240 200 200 Q 240 240 280 200 Q 240 160 200 200" fill="#3b82f6" />
+  <text x="200" y="250" font-family="Arial" font-size="24" text-anchor="middle" fill="#1e40af">Welcome to Aura</text>
+</svg>

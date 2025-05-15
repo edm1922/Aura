@@ -1,0 +1,140 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Performance monitoring models
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  accounts      Account[]
+  sessions      Session[]
+  testResults   TestResult[]
+  moodEntries   MoodEntry[]
+  progress      UserProgress?
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model PerformanceMetric {
+  id        String   @id @default(cuid())
+  name      String
+  value     Float
+  tags      String   @default("{}")
+  timestamp DateTime @default(now())
+  createdAt DateTime @default(now())
+
+  @@index([name])
+  @@index([timestamp])
+}
+
+model ErrorLog {
+  id          String   @id @default(cuid())
+  userId      String?
+  message     String
+  stack       String?  @db.Text
+  url         String?
+  userAgent   String?
+  context     String?  @db.Text
+  severity    String   @default("error")
+  timestamp   DateTime @default(now())
+  resolved    Boolean  @default(false)
+  resolvedAt  DateTime?
+
+  @@index([userId])
+  @@index([timestamp])
+  @@index([severity])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model TestResult {
+  id          String        @id @default(cuid())
+  userId      String
+  user        User          @relation(fields: [userId], references: [id])
+  answers     Json          // Array of TestAnswer
+  traits      Json          // Object with trait scores
+  insights    String[]      // Array of generated insights
+  createdAt   DateTime      @default(now())
+  completedAt DateTime
+  sharedLinks SharedResult[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model SharedResult {
+  id          String     @id @default(cuid())
+  shareId     String     @unique
+  testResultId String
+  testResult  TestResult @relation(fields: [testResultId], references: [id], onDelete: Cascade)
+  createdAt   DateTime   @default(now())
+  expiresAt   DateTime?
+  viewCount   Int        @default(0)
+}
+
+model MoodEntry {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  date      DateTime
+  level     Int      // 1-5 scale
+  category  String   // happy, calm, sad, anxious, angry, energetic
+  notes     String   @default("")
+  factors   String[] // Array of factors affecting mood
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, date])
+}
+
+model UserProgress {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  progress  Json     // UserProgress object
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

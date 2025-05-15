@@ -1,0 +1,12 @@
+<svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" fill="#f0f9ff" />
+  <circle cx="200" cy="120" r="60" fill="#93c5fd" />
+  <path d="M180 100 L220 100 L220 140 L180 140 Z" fill="#dbeafe" />
+  <path d="M190 120 L210 120" stroke="#3b82f6" stroke-width="4" />
+  <path d="M190 130 L210 130" stroke="#3b82f6" stroke-width="4" />
+  <path d="M190 110 L210 110" stroke="#3b82f6" stroke-width="4" />
+  <path d="M160 180 L240 180" stroke="#3b82f6" stroke-width="4" />
+  <path d="M170 190 L230 190" stroke="#3b82f6" stroke-width="4" />
+  <path d="M180 200 L220 200" stroke="#3b82f6" stroke-width="4" />
+  <text x="200" y="250" font-family="Arial" font-size="24" text-anchor="middle" fill="#1e40af">Get Insights</text>
+</svg>

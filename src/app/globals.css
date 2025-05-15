@@ -1,0 +1,155 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
+  }
+}
+
+@layer base {
+  :root {
+    /* Dreamy, pastel, iridescent color palette */
+    --color-primary: #8B5CF6; /* Soft purple */
+    --color-primary-dark: #7C3AED; /* Darker purple */
+    --color-primary-light: #DDD6FE; /* Light purple */
+
+    --color-secondary: #C2FFD8; /* Aurora Green */
+    --color-accent: #B6E3F9; /* Sky Glow */
+    --color-accent-alt: #FFF2B6; /* Dreamy Gold */
+
+    /* Background colors */
+    --color-background: #F5EDFF; /* Soft Lilac */
+    --color-background-alt: #EAE6F8; /* Lavender Mist */
+    --color-background-peach: #FFE9E3; /* Creamy Peach */
+
+    /* Text colors */
+    --color-text: #2E2E3A; /* Deep Charcoal */
+    --color-text-light: #6B7280; /* Medium gray */
+
+    /* Badge and aura colors */
+    --badge-background: linear-gradient(135deg, #8B5CF6 0%, #C2FFD8 100%);
+    --badge-border: #DDD6FE;
+    --badge-shadow: rgba(139, 92, 246, 0.3);
+
+    /* Glassmorphism */
+    --glass-background: rgba(255, 255, 255, 0.25);
+    --glass-border: rgba(255, 255, 255, 0.18);
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+    --glass-blur: 8px;
+  }
+
+  body {
+    @apply antialiased;
+    background-color: var(--color-background);
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(194, 255, 216, 0.15) 0%, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(182, 227, 249, 0.1) 0%, transparent 40%);
+    color: var(--color-text);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
+  }
+
+  p, a, button, input, textarea, select, li {
+    @apply font-sans;
+  }
+
+  .font-handwritten {
+    @apply font-handwriting;
+  }
+}
+
+@layer utilities {
+  /* Shimmer animation */
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+
+  .animate-shimmer {
+    background: linear-gradient(
+      90deg,
+      rgba(221, 214, 254, 0.3) 25%,
+      rgba(194, 255, 216, 0.3) 37%,
+      rgba(182, 227, 249, 0.3) 63%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+  }
+
+  /* Glow animation */
+  @keyframes glow {
+    0% {
+      box-shadow: 0 0 5px rgba(139, 92, 246, 0.5);
+    }
+    50% {
+      box-shadow: 0 0 20px rgba(139, 92, 246, 0.8);
+    }
+    100% {
+      box-shadow: 0 0 5px rgba(139, 92, 246, 0.5);
+    }
+  }
+
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite;
+  }
+
+  /* Pulse animation */
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.05);
+      opacity: 0.8;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 3s ease-in-out infinite;
+  }
+
+  /* Ring pulse animation for 3D orb */
+  @keyframes ringPulse {
+    0% {
+      transform: scale(1);
+      opacity: 0.2;
+    }
+    50% {
+      transform: scale(1.1);
+      opacity: 0.5;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 0.2;
+    }
+  }
+
+  .animate-ring-pulse {
+    animation: ringPulse 3s ease-in-out infinite;
+  }
+
+  /* Glassmorphism */
+  .glass {
+    background: var(--glass-background);
+    backdrop-filter: blur(var(--glass-blur));
+    -webkit-backdrop-filter: blur(var(--glass-blur));
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+  }
+}
