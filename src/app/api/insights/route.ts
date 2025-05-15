@@ -41,11 +41,13 @@ export async function POST(request: NextRequest) {
 
       // Format the answers for the AI
       const formattedAnswers = Array.isArray(testResult.answers)
-        ? testResult.answers.map(answer => ({
-            questionText: answer.questionText || 'Question',
-            answerText: answer.answerText || 'Answer',
-            answerValue: answer.answerValue || 3,
-          }))
+        ? testResult.answers
+            .filter(answer => answer !== null && answer !== undefined)
+            .map(answer => ({
+              questionText: answer?.questionText || 'Question',
+              answerText: answer?.answerText || 'Answer',
+              answerValue: answer?.answerValue || 3,
+            }))
         : [];
 
       // Generate insights using DeepSeek API
