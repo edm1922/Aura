@@ -112,12 +112,19 @@ export async function POST(request: NextRequest) {
 
     try {
       // Check if entry already exists for this date
+      // Create start and end dates for the day
+      const startDate = new Date(date);
+      startDate.setHours(0, 0, 0, 0);
+
+      const endDate = new Date(date);
+      endDate.setHours(23, 59, 59, 999);
+
       const existingEntry = await prisma.moodEntry.findFirst({
         where: {
           userId: session.user.id,
           date: {
-            gte: new Date(date).setHours(0, 0, 0, 0),
-            lt: new Date(date).setHours(23, 59, 59, 999),
+            gte: startDate,
+            lt: endDate,
           },
         },
       })
