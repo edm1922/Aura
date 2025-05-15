@@ -63,7 +63,9 @@ export const authOptions: NextAuthOptions = {
   },
   pages: {
     signIn: '/auth/signin',
-    signUp: '/auth/signup',
+    // signUp is not a valid property in PagesOptions, but we can use newUser instead
+    // or just remove it since we handle signup separately
+    // signUp: '/auth/signup',
   },
   callbacks: {
     async session({ token, session }) {
