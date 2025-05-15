@@ -4,14 +4,17 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node scripts/vercel-build.js",
+    "build:next": "next build",
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
     "cypress": "cypress open",
     "cypress:headless": "cypress run",
     "test:e2e": "start-server-and-test dev http://localhost:3000 cypress",
-    "test:e2e:ci": "start-server-and-test start http://localhost:3000 cypress:headless"
+    "test:e2e:ci": "start-server-and-test start http://localhost:3000 cypress:headless",
+    "postinstall": "prisma generate",
+    "analyze": "ANALYZE=true next build"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.9.1",
