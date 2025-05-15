@@ -2,7 +2,8 @@
 
 import { useRef, useEffect, useState } from 'react'
 import * as THREE from 'three'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+// Import OrbitControls from the correct path in Three.js
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
 interface SimpleThreeOrbProps {
   traits?: {
