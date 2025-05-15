@@ -3,12 +3,13 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 
-interface GlassCardProps {
+export interface GlassCardProps {
   children: React.ReactNode
   className?: string
   hoverEffect?: boolean
   glowEffect?: boolean
   delay?: number
+  id?: string
 }
 
 export default function GlassCard({
@@ -17,14 +18,16 @@ export default function GlassCard({
   hoverEffect = false,
   glowEffect = false,
   delay = 0,
+  id,
 }: GlassCardProps) {
   return (
     <motion.div
+      id={id}
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay }}
       className={`
-        glass rounded-xl p-6 
+        glass rounded-xl p-6
         ${hoverEffect ? 'hover:shadow-glow-md transition-shadow duration-300' : ''}
         ${glowEffect ? 'animate-glow' : ''}
         ${className}
