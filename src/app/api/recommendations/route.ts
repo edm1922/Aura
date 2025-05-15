@@ -168,7 +168,7 @@ async function generateRecommendations(
 
     const messages = [
       {
-        role: 'system',
+        role: 'system' as const,
         content: `You are an expert personality analyst and wellness coach. Your task is to generate personalized recommendations based on personality traits and recent mood data.
         Focus on providing actionable recommendations in three categories:
         1. Activities that might improve the user's mood
@@ -195,7 +195,7 @@ async function generateRecommendations(
         3. [personal growth tip]`
       },
       {
-        role: 'user',
+        role: 'user' as const,
         content: `Here are the personality trait scores from a test:
 
         ${formattedTraits || 'No personality test data available yet.'}
