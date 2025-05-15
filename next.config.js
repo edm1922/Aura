@@ -41,22 +41,7 @@ const nextConfig = {
     ];
   },
 
-  // Ensure JSX is properly handled
-  webpack: (config, { isServer }) => {
-    // Add babel-loader for JSX files
-    config.module.rules.push({
-      test: /\.(js|jsx|ts|tsx)$/,
-      exclude: /node_modules/,
-      use: {
-        loader: 'babel-loader',
-        options: {
-          presets: ['next/babel'],
-        },
-      },
-    });
 
-    return config;
-  },
 }
 
 module.exports = nextConfig
