@@ -1,7 +1,9 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "target": "es2015",
+    "downlevelIteration": true
   },
   "exclude": [
     "node_modules",
