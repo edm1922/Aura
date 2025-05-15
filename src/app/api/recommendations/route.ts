@@ -87,7 +87,8 @@ export async function GET(request: NextRequest) {
           'Expires': '0'
         }
       });
-    } catch (dbError) {
+    } catch (error) {
+      const dbError = error as Error;
       console.error('Database error fetching data for recommendations:', dbError);
 
       // Return mock recommendations for development
