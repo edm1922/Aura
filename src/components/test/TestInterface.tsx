@@ -130,7 +130,7 @@ export default function TestInterface({
           console.log('Received adaptive questions successfully:', data.nextQuestions.length)
 
           // Check if the questions are unique (not duplicates)
-          const questionTexts = data.nextQuestions.map(q => q.text);
+          const questionTexts = data.nextQuestions.map((q: Question) => q.text);
           const uniqueQuestionTexts = [...new Set(questionTexts)];
 
           if (uniqueQuestionTexts.length < questionTexts.length) {
