@@ -40,6 +40,27 @@ async function main() {
     log('Generating Prisma client...');
     execSync('npx prisma generate', { stdio: 'inherit' });
 
+    // Fix TypeScript configuration for the build
+    log('Updating TypeScript configuration for build...');
+    const tsConfigPath = path.join(process.cwd(), 'tsconfig.json');
+
+    try {
+      // Read the current tsconfig.json
+      const tsConfig = JSON.parse(fs.readFileSync(tsConfigPath, 'utf8'));
+
+      // Update the configuration to support JSX and Set spread
+      tsConfig.compilerOptions.jsx = 'react-jsx';
+      tsConfig.compilerOptions.target = 'es2015';
+      tsConfig.compilerOptions.downlevelIteration = true;
+
+      // Write the updated configuration back to the file
+      fs.writeFileSync(tsConfigPath, JSON.stringify(tsConfig, null, 2));
+      log('TypeScript configuration updated successfully');
+    } catch (error) {
+      log('Warning: Failed to update TypeScript configuration');
+      console.error(error);
+    }
+
     // Run the Next.js build
     log('Running Next.js build...');
     execSync('next build', { stdio: 'inherit' });
