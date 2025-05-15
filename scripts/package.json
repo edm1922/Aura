@@ -2,7 +2,6 @@
   "name": "aura-test-scripts",
   "version": "1.0.0",
   "description": "Test scripts for Aura Personality Test",
-  "type": "module",
   "dependencies": {
     "dotenv": "^16.3.1",
     "node-fetch": "^3.3.2"
