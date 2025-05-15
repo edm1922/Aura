@@ -114,10 +114,17 @@ export async function GET(request: NextRequest) {
   }
 }
 
+// Define the type for recommendations categories at the top level
+type RecommendationCategories = {
+  activities: string[];
+  content: string[];
+  personalGrowth: string[];
+};
+
 async function generateRecommendations(
   traits: Record<string, number>,
   moodEntries: any[]
-) {
+): Promise<RecommendationCategories> {
   try {
     // Check if we have enough data to generate meaningful recommendations
     const hasTraits = Object.keys(traits).length > 0;
@@ -221,8 +228,10 @@ async function generateRecommendations(
       console.log(`Recommendations: DeepSeek API response received in ${Date.now() - startTime}ms`);
       console.log(`Recommendations: Response length: ${response.length} characters`);
 
+      // Use the RecommendationCategories type defined at the top level
+
       // Parse the response into categories
-      const categories = {
+      const categories: RecommendationCategories = {
         activities: [],
         content: [],
         personalGrowth: []
@@ -293,7 +302,7 @@ function extractRecommendations(text: string): string[] {
     .filter(item => item.length > 10);
 }
 
-function getMockRecommendations() {
+function getMockRecommendations(): RecommendationCategories {
   return {
     activities: [
       "Try a 10-minute mindfulness meditation to center yourself and reduce stress.",
