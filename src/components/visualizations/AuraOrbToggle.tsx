@@ -44,7 +44,7 @@ export default function AuraOrbToggle({
       // Or if it's a low-end device (rough estimate based on hardware concurrency)
       (navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4)
 
-    setIsLowPerformance(isLowEnd)
+    setIsLowPerformance(isLowEnd ? true : false)
   }, [])
 
   // If we're on the server or haven't determined performance yet, render nothing

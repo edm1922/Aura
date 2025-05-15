@@ -211,7 +211,7 @@ export default function TestInterface({
       clearTimeout(advanceTimeoutId) // Clear the advance timeout
 
       const err = error as Error;
-      if (err.name === 'AbortError') {
+      if (err && err.name === 'AbortError') {
         console.error('Adaptive questions request timed out')
         setError('Request timed out. Continuing with standard test.')
       } else {

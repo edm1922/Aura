@@ -215,22 +215,24 @@ export default function AuraOrb({
         const sizePulse = Math.sin(time * this.speed) * 0.5 + 1;
 
         // Draw particle with glow effect
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size * sizePulse, 0, Math.PI * 2);
-        ctx.fillStyle = this.color;
-        ctx.fill();
+        if (ctx) {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size * sizePulse, 0, Math.PI * 2);
+          ctx.fillStyle = this.color;
+          ctx.fill();
 
-        // Add glow effect
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size * sizePulse * 1.5, 0, Math.PI * 2);
-        const gradient = ctx.createRadialGradient(
-          this.x, this.y, this.size * sizePulse * 0.5,
-          this.x, this.y, this.size * sizePulse * 1.5
-        );
-        gradient.addColorStop(0, this.color);
-        gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
-        ctx.fillStyle = gradient;
-        ctx.fill();
+          // Add glow effect
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size * sizePulse * 1.5, 0, Math.PI * 2);
+          const gradient = ctx.createRadialGradient(
+            this.x, this.y, this.size * sizePulse * 0.5,
+            this.x, this.y, this.size * sizePulse * 1.5
+          );
+          gradient.addColorStop(0, this.color);
+          gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+          ctx.fillStyle = gradient;
+          ctx.fill();
+        }
       }
     }
 
