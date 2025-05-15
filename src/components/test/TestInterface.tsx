@@ -132,7 +132,7 @@ export default function TestInterface({
           // Check if the questions are unique (not duplicates)
           const questionTexts = data.nextQuestions.map((q: Question) => q.text);
           // Use Array.filter for uniqueness instead of Set spread
-          const uniqueQuestionTexts = questionTexts.filter((text, index, self) =>
+          const uniqueQuestionTexts = questionTexts.filter((text: string, index: number, self: string[]) =>
             self.indexOf(text) === index
           );
 
@@ -206,10 +206,11 @@ export default function TestInterface({
         console.log('No longer on question 6, discarding adaptive questions response')
         clearTimeout(advanceTimeoutId)
       }
-    } catch (err) {
+    } catch (error) {
       clearTimeout(timeoutId) // Make sure to clear the timeout
       clearTimeout(advanceTimeoutId) // Clear the advance timeout
 
+      const err = error as Error;
       if (err.name === 'AbortError') {
         console.error('Adaptive questions request timed out')
         setError('Request timed out. Continuing with standard test.')
