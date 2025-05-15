@@ -9,10 +9,14 @@ NC='\033[0m' # No Color
 echo -e "${YELLOW}Starting build test...${NC}"
 
 # Step 1: Run TypeScript type checking (excluding test files)
-echo -e "\n${YELLOW}Step 1: TypeScript type checking...${NC}"
-echo -e "${YELLOW}WARNING: TypeScript checks are currently bypassed.${NC}"
-echo -e "${YELLOW}Run 'npm run type-check:build' manually to check for TypeScript errors.${NC}"
-echo -e "${GREEN}Proceeding with build...${NC}"
+echo -e "\n${YELLOW}Step 1: Running TypeScript type checking (excluding test files)...${NC}"
+npx tsc --noEmit --project tsconfig.build.json
+if [ $? -ne 0 ]; then
+  echo -e "${RED}TypeScript errors found. Please fix them before deploying.${NC}"
+  exit 1
+else
+  echo -e "${GREEN}TypeScript check passed!${NC}"
+fi
 
 # Step 2: Run ESLint
 echo -e "\n${YELLOW}Step 2: Running ESLint...${NC}"

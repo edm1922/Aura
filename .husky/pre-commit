@@ -1,3 +1,6 @@
-# Skip TypeScript checks for now, but print a warning
-echo "WARNING: TypeScript checks are currently bypassed."
-echo "Run 'npm run type-check:build' manually to check for TypeScript errors."
+# Run TypeScript type checking (excluding test files)
+echo "Running TypeScript type checking (excluding test files)..."
+npx tsc --noEmit --project tsconfig.build.json || (echo "TypeScript errors found. Please fix them before committing." && exit 1)
+
+# If we get here, TypeScript check passed
+echo "TypeScript check passed!"

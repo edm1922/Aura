@@ -18,6 +18,7 @@
     "prepare": "husky",
     "type-check": "tsc --noEmit",
     "type-check:build": "tsc --noEmit --project tsconfig.build.json",
+    "check-deployment": "./scripts/check-deployment-errors.sh",
     "test-build": "./scripts/test-build.sh"
   },
   "dependencies": {
