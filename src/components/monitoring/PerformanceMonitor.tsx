@@ -108,13 +108,25 @@ export default function PerformanceMonitor() {
     }
   }
 
+  // Define the Chrome Performance interface extension
+  interface ChromePerformance extends Performance {
+    memory?: {
+      totalJSHeapSize: number;
+      usedJSHeapSize: number;
+      jsHeapSizeLimit: number;
+    };
+  }
+
   // Track memory usage
   const trackMemoryUsage = () => {
-    if (typeof window === 'undefined' || !performance.memory) return
+    if (typeof window === 'undefined') return
+
+    // Cast performance to ChromePerformance
+    const chromePerformance = performance as ChromePerformance
+    if (!chromePerformance.memory) return
 
     try {
-      // @ts-ignore - performance.memory is not in the TypeScript types
-      const memory = performance.memory
+      const memory = chromePerformance.memory
 
       if (memory) {
         const memoryUsage = {
