@@ -216,8 +216,15 @@ export function MoodAdaptiveProvider({ children }: { children: ReactNode }) {
 
   // Helper function to blend colors
   const blendColors = (color1: string, color2: string, ratio: number): string => {
+    // Define color type
+    type RGBColor = {
+      r: number;
+      g: number;
+      b: number;
+    };
+
     // Convert hex to RGB
-    const parseColor = (color: string) => {
+    const parseColor = (color: string): string | RGBColor => {
       if (color.startsWith('var(')) return color // Skip CSS variables
 
       const hex = color.startsWith('#') ? color.substring(1) : color
@@ -235,6 +242,11 @@ export function MoodAdaptiveProvider({ children }: { children: ReactNode }) {
 
     const c1 = parseColor(color1)
     const c2 = parseColor(color2)
+
+    // Check if both colors are RGB objects
+    if (typeof c1 === 'string' || typeof c2 === 'string') {
+      return ratio > 0.5 ? color2 : color1
+    }
 
     // Blend the colors
     const r = Math.round(c1.r * (1 - ratio) + c2.r * ratio)
