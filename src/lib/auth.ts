@@ -19,7 +19,8 @@ declare module 'next-auth' {
 }
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
+  // @ts-ignore - Type mismatch between @auth/prisma-adapter and next-auth
+  adapter: PrismaAdapter(prisma) as any,
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
     CredentialsProvider({
