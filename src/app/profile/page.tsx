@@ -16,8 +16,9 @@ export default async function ProfilePage() {
   const latestTestResult = await prisma.testResult.findFirst({
     where: {
       userId: session.user.id,
-      completedAt: {
-        not: null,
+      // Filter for non-null completedAt values
+      NOT: {
+        completedAt: null,
       },
     },
     orderBy: {
