@@ -13,10 +13,10 @@ import LoadingButton from '@/components/LoadingButton'
 
 interface ProfileClientProps {
   user: {
-    id?: string
-    name?: string
-    email?: string
-    image?: string
+    id?: string | null
+    name?: string | null
+    email?: string | null
+    image?: string | null
   }
   traits: Record<string, number> | null
 }
@@ -26,27 +26,27 @@ export default function ProfileClient({ user, traits }: ProfileClientProps) {
   const router = useRouter()
   const { showNotification } = useNotification()
   const { theme, updateThemeFromTraits } = useTheme()
-  
+
   const [name, setName] = useState(user.name || '')
   const [isUpdating, setIsUpdating] = useState(false)
-  
+
   // Apply theme from traits when component mounts
   useState(() => {
     if (traits) {
       updateThemeFromTraits(traits)
     }
   })
-  
+
   const handleUpdateProfile = async (e: React.FormEvent) => {
     e.preventDefault()
-    
+
     if (!name.trim()) {
       showNotification('error', 'Name cannot be empty')
       return
     }
-    
+
     setIsUpdating(true)
-    
+
     try {
       const response = await fetch('/api/user/profile', {
         method: 'PUT',
@@ -57,11 +57,11 @@ export default function ProfileClient({ user, traits }: ProfileClientProps) {
           name,
         }),
       })
-      
+
       if (!response.ok) {
         throw new Error('Failed to update profile')
       }
-      
+
       // Update the session
       await update({
         ...session,
@@ -70,7 +70,7 @@ export default function ProfileClient({ user, traits }: ProfileClientProps) {
           name,
         },
       })
-      
+
       showNotification('success', 'Profile updated successfully')
     } catch (error) {
       console.error('Error updating profile:', error)
@@ -79,7 +79,7 @@ export default function ProfileClient({ user, traits }: ProfileClientProps) {
       setIsUpdating(false)
     }
   }
-  
+
   return (
     <PageTransition>
       <div className="px-4 py-6 sm:px-0">
@@ -104,7 +104,7 @@ export default function ProfileClient({ user, traits }: ProfileClientProps) {
                     </p>
                   </div>
                 </div>
-                
+
                 <form onSubmit={handleUpdateProfile}>
                   <div className="mb-4">
                     <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
@@ -118,7 +118,7 @@ export default function ProfileClient({ user, traits }: ProfileClientProps) {
                       className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary"
                     />
                   </div>
-                  
+
                   <div className="flex justify-end">
                     <LoadingButton
                       type="submit"
@@ -131,13 +131,13 @@ export default function ProfileClient({ user, traits }: ProfileClientProps) {
                 </form>
               </div>
             </FadeIn>
-            
+
             <FadeIn delay={0.1}>
               <div className="bg-white shadow rounded-lg p-6">
                 <h2 className="text-lg font-medium text-gray-900 mb-4">
                   Account Settings
                 </h2>
-                
+
                 <div className="space-y-4">
                   <div>
                     <h3 className="text-sm font-medium text-gray-700 mb-1">
@@ -147,7 +147,7 @@ export default function ProfileClient({ user, traits }: ProfileClientProps) {
                       {user.email}
                     </p>
                   </div>
-                  
+
                   <div>
                     <h3 className="text-sm font-medium text-gray-700 mb-1">
                       Password
@@ -160,7 +160,7 @@ export default function ProfileClient({ user, traits }: ProfileClientProps) {
                       Change Password
                     </button>
                   </div>
-                  
+
                   <div className="pt-4 border-t border-gray-200">
                     <button
                       type="button"
@@ -174,7 +174,7 @@ export default function ProfileClient({ user, traits }: ProfileClientProps) {
               </div>
             </FadeIn>
           </div>
-          
+
           {/* Theme Customization */}
           <div className="md:w-1/3">
             <FadeIn delay={0.2}>
