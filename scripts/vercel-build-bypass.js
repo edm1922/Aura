@@ -284,61 +284,77 @@ async function main() {
       fs.mkdirSync(staticDir, { recursive: true });
     }
 
-    const chunksDir = path.join(staticDir, 'chunks');
-    if (!fs.existsSync(chunksDir)) {
-      fs.mkdirSync(chunksDir, { recursive: true });
+    const staticChunksDir = path.join(staticDir, 'chunks');
+    if (!fs.existsSync(staticChunksDir)) {
+      fs.mkdirSync(staticChunksDir, { recursive: true });
     }
 
-    const pagesDir = path.join(staticDir, 'pages');
-    if (!fs.existsSync(pagesDir)) {
-      fs.mkdirSync(pagesDir, { recursive: true });
+    const staticPagesDir = path.join(staticDir, 'pages');
+    if (!fs.existsSync(staticPagesDir)) {
+      fs.mkdirSync(staticPagesDir, { recursive: true });
+    }
+
+    const staticDevDir = path.join(staticDir, 'development');
+    if (!fs.existsSync(staticDevDir)) {
+      fs.mkdirSync(staticDevDir, { recursive: true });
     }
 
     // Create minimal chunk files
     fs.writeFileSync(
-      path.join(chunksDir, 'polyfills-c67a75d1b6f99dc8.js'),
+      path.join(staticChunksDir, 'polyfills-c67a75d1b6f99dc8.js'),
       '// Polyfills'
     );
 
     fs.writeFileSync(
-      path.join(chunksDir, 'webpack-fd8027ecb5121010.js'),
+      path.join(staticChunksDir, 'webpack-fd8027ecb5121010.js'),
       '// Webpack runtime'
     );
 
     fs.writeFileSync(
-      path.join(chunksDir, 'main-fd8027ecb5121010.js'),
+      path.join(staticChunksDir, 'main-fd8027ecb5121010.js'),
       '// Main chunk'
     );
 
     fs.writeFileSync(
-      path.join(chunksDir, 'main-app-fd8027ecb5121010.js'),
+      path.join(staticChunksDir, 'main-app-fd8027ecb5121010.js'),
       '// Main app chunk'
     );
 
     // Create minimal page files
     fs.writeFileSync(
-      path.join(pagesDir, '_app-fd8027ecb5121010.js'),
+      path.join(staticPagesDir, '_app-fd8027ecb5121010.js'),
       '// App page'
     );
 
     fs.writeFileSync(
-      path.join(pagesDir, 'index-fd8027ecb5121010.js'),
+      path.join(staticPagesDir, 'index-fd8027ecb5121010.js'),
       '// Index page'
     );
 
     fs.writeFileSync(
-      path.join(pagesDir, 'dashboard-fd8027ecb5121010.js'),
+      path.join(staticPagesDir, 'dashboard-fd8027ecb5121010.js'),
       '// Dashboard page'
     );
 
     fs.writeFileSync(
-      path.join(pagesDir, 'profile-fd8027ecb5121010.js'),
+      path.join(staticPagesDir, 'profile-fd8027ecb5121010.js'),
       '// Profile page'
     );
 
     fs.writeFileSync(
-      path.join(pagesDir, '_error-fd8027ecb5121010.js'),
+      path.join(staticPagesDir, '_error-fd8027ecb5121010.js'),
       '// Error page'
+    );
+
+    // Create development files
+    fs.writeFileSync(
+      path.join(staticDevDir, '_buildManifest.js'),
+      '// Build manifest'
+    );
+
+    fs.writeFileSync(
+      path.join(staticDevDir, '_ssgManifest.js'),
+      '// SSG manifest'
     );
 
     // Create server-manifest.json
