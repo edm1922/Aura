@@ -141,6 +141,114 @@ async function main() {
       })
     );
 
+    // Create routes-manifest.json
+    fs.writeFileSync(
+      path.join(nextDir, 'routes-manifest.json'),
+      JSON.stringify({
+        version: 3,
+        pages404: true,
+        basePath: "",
+        redirects: [
+          {
+            source: "/test",
+            destination: "/test/adaptive",
+            permanent: true,
+            statusCode: 308
+          }
+        ],
+        headers: [
+          {
+            source: "/api/:path*",
+            headers: [
+              {
+                key: "Cache-Control",
+                value: "no-store, max-age=0"
+              },
+              {
+                key: "Pragma",
+                value: "no-cache"
+              },
+              {
+                key: "Expires",
+                value: "0"
+              }
+            ]
+          }
+        ],
+        rewrites: [],
+        dataRoutes: [],
+        staticRoutes: [
+          {
+            page: "/",
+            regex: "^/(?:/)?$",
+            routeKeys: {},
+            namedRegex: "^/(?:/)?$"
+          },
+          {
+            page: "/dashboard",
+            regex: "^/dashboard(?:/)?$",
+            routeKeys: {},
+            namedRegex: "^/dashboard(?:/)?$"
+          },
+          {
+            page: "/profile",
+            regex: "^/profile(?:/)?$",
+            routeKeys: {},
+            namedRegex: "^/profile(?:/)?$"
+          }
+        ],
+        dynamicRoutes: [
+          {
+            page: "/api/test/adaptive",
+            regex: "^/api/test/adaptive(?:/)?$",
+            routeKeys: {},
+            namedRegex: "^/api/test/adaptive(?:/)?$"
+          },
+          {
+            page: "/api/recommendations",
+            regex: "^/api/recommendations(?:/)?$",
+            routeKeys: {},
+            namedRegex: "^/api/recommendations(?:/)?$"
+          }
+        ]
+      })
+    );
+
+    // Create prerender-manifest.json
+    fs.writeFileSync(
+      path.join(nextDir, 'prerender-manifest.json'),
+      JSON.stringify({
+        version: 4,
+        routes: {},
+        dynamicRoutes: {},
+        notFoundRoutes: [],
+        preview: {
+          previewModeId: "preview-mode-id",
+          previewModeSigningKey: "preview-mode-signing-key",
+          previewModeEncryptionKey: "preview-mode-encryption-key"
+        }
+      })
+    );
+
+    // Create build-manifest.json
+    fs.writeFileSync(
+      path.join(nextDir, 'build-manifest.json'),
+      JSON.stringify({
+        polyfillFiles: [],
+        devFiles: [],
+        ampDevFiles: [],
+        lowPriorityFiles: [],
+        rootMainFiles: [],
+        pages: {
+          "/_app": [],
+          "/": [],
+          "/dashboard": [],
+          "/profile": []
+        },
+        ampFirstPages: []
+      })
+    );
+
     // Generate Prisma client
     log('Generating Prisma client...');
     execSync('npx prisma generate', { stdio: 'inherit' });
