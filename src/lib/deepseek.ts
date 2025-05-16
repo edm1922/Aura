@@ -108,12 +108,14 @@ export class DeepSeekAPI {
 
         return content;
       }
-    } catch (error) {
+    } catch (error: unknown) {
       clearTimeout(timeoutId);
-      console.error(`DeepSeek API error: ${error.message}`);
+      // Safely access error properties with type checking
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      console.error(`DeepSeek API error: ${errorMessage}`);
 
       // For timeout errors, return a fallback response instead of throwing
-      if (error.name === 'AbortError') {
+      if (error instanceof Error && error.name === 'AbortError') {
         console.warn('DeepSeek API request timed out, returning fallback response');
         return "AI personalization timed out. Your test will continue with standard questions.";
       }
@@ -140,8 +142,9 @@ export class DeepSeekAPI {
           const data = JSON.parse(event.data);
           const text = data.choices[0]?.delta?.content || '';
           fullText += text;
-        } catch (e) {
-          console.error('Error parsing stream data', e);
+        } catch (e: unknown) {
+          const errorMessage = e instanceof Error ? e.message : 'Unknown error';
+          console.error('Error parsing stream data', errorMessage);
         }
       }
     });
@@ -320,8 +323,9 @@ export class DeepSeekAPI {
           { value: 5, text: 'Strongly Agree' },
         ],
       }));
-    } catch (error) {
-      console.error('Error generating AI questions:', error);
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      console.error('Error generating AI questions:', errorMessage);
       // Return mock questions as fallback
       return this.getMockQuestions(count);
     }
