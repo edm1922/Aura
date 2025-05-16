@@ -1,7 +1,7 @@
-// This file configures route segment config for the app
+// This file configures route segment config for the root page
 // See: https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config
 
-// Mark all routes as dynamic to prevent static generation errors
+// Mark the page as dynamic to prevent static generation errors
 export const dynamic = 'force-dynamic';
 
 // Disable static generation

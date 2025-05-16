@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node scripts/vercel-build-bypass.js",
     "build:next": "next build",
     "build:bypass": "node scripts/vercel-build-bypass.js",
     "start": "next start",

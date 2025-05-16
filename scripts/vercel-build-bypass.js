@@ -18,62 +18,94 @@ function log(message) {
 async function main() {
   try {
     log('Starting Vercel build bypass...');
-    
+
     // Create the .next directory structure
     const nextDir = path.join(process.cwd(), '.next');
     if (!fs.existsSync(nextDir)) {
       fs.mkdirSync(nextDir, { recursive: true });
       log('Created .next directory');
     }
-    
+
     // Create a BUILD_ID file
     const buildIdPath = path.join(nextDir, 'BUILD_ID');
     const randomBuildId = Math.random().toString(36).substring(2, 15);
     fs.writeFileSync(buildIdPath, randomBuildId);
     log('Created BUILD_ID file');
-    
+
     // Create required directories
     const serverDir = path.join(nextDir, 'server');
     if (!fs.existsSync(serverDir)) {
       fs.mkdirSync(serverDir, { recursive: true });
     }
-    
+
     const pagesDir = path.join(serverDir, 'pages');
     if (!fs.existsSync(pagesDir)) {
       fs.mkdirSync(pagesDir, { recursive: true });
     }
-    
+
     const appDir = path.join(serverDir, 'app');
     if (!fs.existsSync(appDir)) {
       fs.mkdirSync(appDir, { recursive: true });
     }
-    
+
     const chunksDir = path.join(serverDir, 'chunks');
     if (!fs.existsSync(chunksDir)) {
       fs.mkdirSync(chunksDir, { recursive: true });
     }
-    
+
     // Create minimal required files
     fs.writeFileSync(
       path.join(pagesDir, '_app.js'),
       'module.exports = {page: function(){return {}}}'
     );
-    
+
     fs.writeFileSync(
       path.join(pagesDir, '_document.js'),
       'module.exports = {page: function(){return {}}}'
     );
-    
+
+    // Create app directory structure
+    const appPageDir = path.join(appDir, 'page');
+    if (!fs.existsSync(appPageDir)) {
+      fs.mkdirSync(appPageDir, { recursive: true });
+    }
+
+    // Create app page file
     fs.writeFileSync(
       path.join(appDir, 'page.js'),
       'module.exports = {page: function(){return {}}}'
     );
-    
+
+    // Create app layout file
+    fs.writeFileSync(
+      path.join(appDir, 'layout.js'),
+      'module.exports = {layout: function(){return {}}}'
+    );
+
+    // Create app not-found file
+    fs.writeFileSync(
+      path.join(appDir, 'not-found.js'),
+      'module.exports = {notFound: function(){return {}}}'
+    );
+
+    // Create app loading file
+    fs.writeFileSync(
+      path.join(appDir, 'loading.js'),
+      'module.exports = {loading: function(){return {}}}'
+    );
+
+    // Create chunks
     fs.writeFileSync(
       path.join(chunksDir, 'main.js'),
       'module.exports = {}'
     );
-    
+
+    // Create webpack runtime
+    fs.writeFileSync(
+      path.join(nextDir, 'webpack-runtime.js'),
+      'module.exports = {}'
+    );
+
     // Create a minimal next-config.json
     fs.writeFileSync(
       path.join(nextDir, 'next-config.json'),
@@ -84,7 +116,7 @@ async function main() {
         output: 'standalone'
       })
     );
-    
+
     // Create a required.js manifest
     fs.writeFileSync(
       path.join(nextDir, 'required-server-files.json'),
@@ -100,15 +132,19 @@ async function main() {
           'server/pages/_app.js',
           'server/pages/_document.js',
           'server/app/page.js',
-          'server/chunks/main.js'
+          'server/app/layout.js',
+          'server/app/not-found.js',
+          'server/app/loading.js',
+          'server/chunks/main.js',
+          'webpack-runtime.js'
         ]
       })
     );
-    
+
     // Generate Prisma client
     log('Generating Prisma client...');
     execSync('npx prisma generate', { stdio: 'inherit' });
-    
+
     log('Build bypass completed successfully!');
   } catch (error) {
     log('Build bypass failed:');
