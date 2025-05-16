@@ -83,10 +83,12 @@ This project uses PostgreSQL as the database. Before running the application:
 
 ## Deployment on Vercel
 
-This project is optimized for deployment on Vercel. Follow these steps to deploy:
+This project is optimized for deployment on Vercel. For detailed instructions, see the [Vercel Deployment Guide](docs/vercel-deployment.md).
+
+### Quick Deployment Steps
 
 1. **Push your code to GitHub**
-   - Make sure your code is in a GitHub repository
+   - Make sure your code is in the GitHub repository at https://github.com/edm1922/Aura
 
 2. **Create a new project on Vercel**
    - Go to [Vercel](https://vercel.com) and sign in
@@ -96,13 +98,14 @@ This project is optimized for deployment on Vercel. Follow these steps to deploy
      - Framework Preset: Next.js
      - Root Directory: ./
      - Build Command: npm run build
-     - Output Directory: .next
+     - Install Command: npm install --legacy-peer-deps
+     - Output Directory: .next (default)
 
 3. **Set up environment variables**
    - In the Vercel project settings, add the following environment variables:
      - `DATABASE_URL`: Your production database URL
-     - `NEXTAUTH_URL`: Your production URL (e.g., https://your-app.vercel.app)
-     - `NEXTAUTH_SECRET`: A secure random string
+     - `NEXTAUTH_URL`: Your production URL (e.g., https://aura-edm1922.vercel.app)
+     - `NEXTAUTH_SECRET`: A secure random string (min 32 characters)
      - `DEEPSEEK_API_KEY`: Your DeepSeek API key
 
 4. **Set up a PostgreSQL database**
@@ -114,22 +117,34 @@ This project is optimized for deployment on Vercel. Follow these steps to deploy
    - Your application will be available at the provided Vercel URL
 
 6. **Post-deployment**
-   - After the first deployment, you may need to manually run database migrations
-   - You can do this by connecting to your database and running the SQL migrations or using the Prisma CLI
+   - After the first deployment, verify that all features are working correctly
+   - Check the deployment logs for any errors
+   - Use the deployment checklist in [docs/deployment-checklist.md](docs/deployment-checklist.md)
 
-### Continuous Deployment
+### Optimized Build Process
 
-Vercel automatically deploys your application when you push changes to your GitHub repository. The optimized build script will:
+The project uses an optimized build script (`scripts/optimized-vercel-build.js`) that:
 
-- Generate the Prisma client
-- Run database migrations (in production only)
-- Build the Next.js application
-- Apply optimizations for performance
+- Validates environment variables
+- Generates the Prisma client
+- Attempts a normal Next.js build
+- Falls back to a minimal build structure if needed
+- Handles errors gracefully
 
-### Monitoring
+### Performance Optimizations
+
+The deployment includes several performance optimizations:
+
+- Optimized image handling with WebP and AVIF formats
+- Proper caching headers for static assets
+- SEO improvements with comprehensive meta tags
+- Security headers for better protection
+
+### Monitoring and Analytics
 
 After deployment, monitor your application using:
 
 - Vercel Analytics (available in your Vercel dashboard)
-- Database monitoring tools provided by your database host
-- The built-in error tracking in the admin section of your application
+- Built-in performance monitoring in the application
+- Error tracking in the database (`ErrorLog` table)
+- Custom monitoring endpoints at `/api/monitoring/*`

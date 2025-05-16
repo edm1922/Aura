@@ -255,10 +255,23 @@ async function createMinimalBuild() {
  * This file is used by Vercel to start the server in production
  */
 
+// Log startup information
+console.log('Starting Aura server...');
+console.log('Node version:', process.version);
+console.log('Current directory:', process.cwd());
+console.log('Environment:', process.env.NODE_ENV);
+
+// Import required modules
 const http = require('http');
 const { parse } = require('url');
 const fs = require('fs');
 const path = require('path');
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught exception:', error);
+  // Keep the process running
+});
 
 // Create a simple HTTP server
 const server = http.createServer((req, res) => {
@@ -350,15 +363,40 @@ const server = http.createServer((req, res) => {
   }
 });
 
-// Start the server
+// Function to start the server with port fallback
+function startServer(initialPort) {
+  const tryPort = (port) => {
+    console.log('Attempting to start server on port', port);
+
+    // Create server instance
+    const serverInstance = server.listen(port);
+
+    serverInstance.once('listening', () => {
+      const actualPort = serverInstance.address().port;
+      console.log(\`Server running on port \${actualPort}\`);
+      console.log('Server is ready to accept connections');
+    });
+
+    // Handle server errors
+    serverInstance.on('error', (err) => {
+      if (err.code === 'EADDRINUSE') {
+        console.log(\`Port \${port} is already in use, trying \${port + 1}\`);
+        serverInstance.close();
+        // Try the next port
+        tryPort(port + 1);
+      } else {
+        console.error('Server error:', err);
+      }
+    });
+  };
+
+  // Start with the initial port
+  tryPort(initialPort);
+}
+
+// Get the port from environment or use default
 const port = process.env.PORT || 3000;
-server.listen(port, (err) => {
-  if (err) {
-    console.error('Failed to start server:', err);
-    return;
-  }
-  console.log(\`Server running on port \${port}\`);
-});`;
+startServer(port);`;
 
     if (!safeWriteFile(serverJsPath, serverJsContent)) {
       log('Warning: Failed to create server.js file');

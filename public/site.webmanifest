@@ -1,0 +1,21 @@
+{
+  "name": "Aura Personality Test",
+  "short_name": "Aura",
+  "description": "Discover your personality through AI-powered assessment and visualize your unique aura.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#EAE6F8",
+  "theme_color": "#8B5CF6",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

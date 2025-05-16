@@ -4,10 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "node scripts/enhanced-vercel-build.js",
+    "build": "node scripts/optimized-vercel-build.js",
     "build:next": "next build",
     "build:bypass": "node scripts/enhanced-vercel-build.js",
     "build:legacy": "node scripts/vercel-build-bypass.js",
+    "build:optimized": "node scripts/optimized-vercel-build.js",
     "start": "next start",
     "lint": "next lint",
     "test": "jest",
