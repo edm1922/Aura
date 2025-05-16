@@ -33,14 +33,19 @@ const nextConfig = {
 
   // Handle redirects if needed
   async redirects() {
-    return [
-      {
-        source: '/test',
-        destination: '/test/adaptive',
-        permanent: true,
-      },
-      // Add any redirects here if needed
-    ];
+    try {
+      return [
+        {
+          source: '/test',
+          destination: '/test/adaptive',
+          permanent: true,
+        },
+        // Add any redirects here if needed
+      ];
+    } catch (error) {
+      console.error('Error in redirects configuration:', error);
+      return []; // Return empty array as fallback
+    }
   },
 
   // Configure for Vercel deployment
@@ -60,27 +65,60 @@ const nextConfig = {
 
   // Disable static generation for API routes
   async headers() {
-    return [
-      {
-        source: '/api/:path*',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'no-store, max-age=0',
-          },
-          {
-            key: 'Pragma',
-            value: 'no-cache',
-          },
-          {
-            key: 'Expires',
-            value: '0',
-          },
-        ],
-      },
-    ];
+    try {
+      return [
+        {
+          source: '/api/:path*',
+          headers: [
+            {
+              key: 'Cache-Control',
+              value: 'no-store, max-age=0',
+            },
+            {
+              key: 'Pragma',
+              value: 'no-cache',
+            },
+            {
+              key: 'Expires',
+              value: '0',
+            },
+          ],
+        },
+      ];
+    } catch (error) {
+      console.error('Error in headers configuration:', error);
+      return []; // Return empty array as fallback
+    }
   },
 
+  // Error handling for webpack configuration
+  webpack: (config, { isServer }) => {
+    // Add error handling for webpack configuration
+    try {
+      // Return the modified config
+      return config;
+    } catch (error) {
+      console.error('Error in webpack configuration:', error);
+      return config; // Return original config as fallback
+    }
+  },
+
+  // Ensure onDemandEntries doesn't cause issues
+  onDemandEntries: {
+    // Make sure to handle any potential errors in this configuration
+    maxInactiveAge: 60 * 1000,
+    pagesBufferLength: 5,
+  }
 }
 
-module.exports = nextConfig
+// Add global error handling
+try {
+  module.exports = nextConfig;
+} catch (error) {
+  console.error('Error exporting Next.js config:', error);
+  // Export a minimal config as fallback
+  module.exports = {
+    reactStrictMode: true,
+    output: 'standalone'
+  };
+}
