@@ -1,13 +1,14 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, Suspense } from 'react'
 import { usePathname } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import OnboardingTour from './OnboardingTour'
 import WelcomeBanner from './WelcomeBanner'
 import { useOnboarding } from '@/context/OnboardingContext'
 
-export default function OnboardingContainer() {
+// Inner component that uses usePathname
+function OnboardingContainerInner() {
   const { data: session } = useSession()
   const pathname = usePathname()
   const { hasCompletedOnboarding, setHasCompletedOnboarding } = useOnboarding()
@@ -40,5 +41,14 @@ export default function OnboardingContainer() {
       <OnboardingTour />
       <WelcomeBanner />
     </>
+  )
+}
+
+// Wrapper component with Suspense boundary
+export default function OnboardingContainer() {
+  return (
+    <Suspense fallback={null}>
+      <OnboardingContainerInner />
+    </Suspense>
   )
 }

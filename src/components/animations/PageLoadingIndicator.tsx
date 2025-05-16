@@ -1,10 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 
-export default function PageLoadingIndicator() {
+// Inner component that uses useSearchParams
+function PageLoadingIndicatorInner() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const [isLoading, setIsLoading] = useState(false)
@@ -12,12 +13,12 @@ export default function PageLoadingIndicator() {
   useEffect(() => {
     // When the route changes, show the loading indicator
     setIsLoading(true)
-    
+
     // After a short delay, hide the loading indicator
     const timeout = setTimeout(() => {
       setIsLoading(false)
     }, 500)
-    
+
     return () => clearTimeout(timeout)
   }, [pathname, searchParams])
 
@@ -32,5 +33,14 @@ export default function PageLoadingIndicator() {
         transition={{ duration: 0.5, ease: 'easeInOut' }}
       />
     </div>
+  )
+}
+
+// Wrapper component with Suspense boundary
+export default function PageLoadingIndicator() {
+  return (
+    <Suspense fallback={null}>
+      <PageLoadingIndicatorInner />
+    </Suspense>
   )
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useEffect, useState, Suspense } from 'react'
 import { useSession, signOut } from 'next-auth/react'
 import { Menu, Transition } from '@headlessui/react'
 import Link from 'next/link'
@@ -8,7 +8,8 @@ import { usePathname } from 'next/navigation'
 import { UserCircleIcon } from '@heroicons/react/24/outline'
 import AuraBadge from './profile/AuraBadge'
 
-export default function Navigation() {
+// Inner component that uses usePathname
+function NavigationInner() {
   const { data: session } = useSession()
   const pathname = usePathname()
   const [hasTestResults, setHasTestResults] = useState(false)
@@ -133,5 +134,14 @@ export default function Navigation() {
         </div>
       </div>
     </nav>
+  )
+}
+
+// Wrapper component with Suspense boundary
+export default function Navigation() {
+  return (
+    <Suspense fallback={<nav className="bg-white shadow h-16"></nav>}>
+      <NavigationInner />
+    </Suspense>
   )
 }

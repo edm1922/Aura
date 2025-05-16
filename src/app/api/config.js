@@ -15,3 +15,6 @@ export const fetchCache = 'force-no-store';
 
 // Disable static optimization
 export const dynamicParams = true;
+
+// Explicitly set Node.js runtime for API routes
+export const runtime = 'nodejs';

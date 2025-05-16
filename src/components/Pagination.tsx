@@ -3,13 +3,15 @@
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
+import { Suspense } from 'react'
 
 interface PaginationProps {
   totalPages: number
   currentPage: number
 }
 
-export default function Pagination({ totalPages, currentPage }: PaginationProps) {
+// Inner component that uses useSearchParams
+function PaginationInner({ totalPages, currentPage }: PaginationProps) {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
@@ -133,5 +135,14 @@ export default function Pagination({ totalPages, currentPage }: PaginationProps)
         )}
       </div>
     </nav>
+  )
+}
+
+// Wrapper component with Suspense boundary
+export default function Pagination({ totalPages, currentPage }: PaginationProps) {
+  return (
+    <Suspense fallback={null}>
+      <PaginationInner totalPages={totalPages} currentPage={currentPage} />
+    </Suspense>
   )
 }
