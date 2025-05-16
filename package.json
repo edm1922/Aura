@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "node scripts/vercel-build-bypass.js",
+    "build": "next build",
     "build:next": "next build",
-    "build:vercel": "node scripts/vercel-build.cjs",
-    "start": "node server.js",
+    "build:bypass": "node scripts/vercel-build-bypass.js",
+    "start": "next start",
     "lint": "next lint",
     "test": "jest",
     "cypress": "cypress open",

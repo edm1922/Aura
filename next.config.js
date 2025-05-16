@@ -44,11 +44,22 @@ const nextConfig = {
   // Configure for Vercel deployment
   output: 'standalone',
 
-  // Disable static generation completely
+  // Disable static generation
   staticPageGenerationTimeout: 1000,
 
   // Explicitly set that we're not using static exports
   trailingSlash: false,
+
+  // Disable static optimization for all pages
+  experimental: {
+    // Existing experimental features
+    optimizeCss: true,
+    scrollRestoration: true,
+
+    // Disable static generation
+    isrMemoryCacheSize: 0,
+    serverActions: true,
+  },
 
 
 }
