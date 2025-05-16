@@ -41,6 +41,14 @@ const nextConfig = {
     ];
   },
 
+  // Disable static generation for routes that use dynamic features
+  output: 'standalone',
+
+  // Configure which pages should not be statically generated
+  unstable_excludeFiles: [
+    '**/**/api/**/*.js', // Exclude API routes from static generation
+  ],
+
 
 }
 
