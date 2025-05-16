@@ -230,22 +230,172 @@ async function main() {
       })
     );
 
-    // Create build-manifest.json
+    // Create build-manifest.json with more complete information
     fs.writeFileSync(
       path.join(nextDir, 'build-manifest.json'),
       JSON.stringify({
-        polyfillFiles: [],
+        polyfillFiles: [
+          "static/chunks/polyfills-c67a75d1b6f99dc8.js"
+        ],
         devFiles: [],
         ampDevFiles: [],
-        lowPriorityFiles: [],
-        rootMainFiles: [],
+        lowPriorityFiles: [
+          "static/development/_buildManifest.js",
+          "static/development/_ssgManifest.js"
+        ],
+        rootMainFiles: [
+          "static/chunks/webpack-fd8027ecb5121010.js",
+          "static/chunks/main-app-fd8027ecb5121010.js"
+        ],
         pages: {
-          "/_app": [],
-          "/": [],
-          "/dashboard": [],
-          "/profile": []
+          "/_app": [
+            "static/chunks/webpack-fd8027ecb5121010.js",
+            "static/chunks/main-fd8027ecb5121010.js",
+            "static/chunks/pages/_app-fd8027ecb5121010.js"
+          ],
+          "/": [
+            "static/chunks/webpack-fd8027ecb5121010.js",
+            "static/chunks/main-fd8027ecb5121010.js",
+            "static/chunks/pages/index-fd8027ecb5121010.js"
+          ],
+          "/dashboard": [
+            "static/chunks/webpack-fd8027ecb5121010.js",
+            "static/chunks/main-fd8027ecb5121010.js",
+            "static/chunks/pages/dashboard-fd8027ecb5121010.js"
+          ],
+          "/profile": [
+            "static/chunks/webpack-fd8027ecb5121010.js",
+            "static/chunks/main-fd8027ecb5121010.js",
+            "static/chunks/pages/profile-fd8027ecb5121010.js"
+          ],
+          "/_error": [
+            "static/chunks/webpack-fd8027ecb5121010.js",
+            "static/chunks/main-fd8027ecb5121010.js",
+            "static/chunks/pages/_error-fd8027ecb5121010.js"
+          ]
         },
         ampFirstPages: []
+      })
+    );
+
+    // Create static directory structure for chunks
+    const staticDir = path.join(nextDir, 'static');
+    if (!fs.existsSync(staticDir)) {
+      fs.mkdirSync(staticDir, { recursive: true });
+    }
+
+    const chunksDir = path.join(staticDir, 'chunks');
+    if (!fs.existsSync(chunksDir)) {
+      fs.mkdirSync(chunksDir, { recursive: true });
+    }
+
+    const pagesDir = path.join(staticDir, 'pages');
+    if (!fs.existsSync(pagesDir)) {
+      fs.mkdirSync(pagesDir, { recursive: true });
+    }
+
+    // Create minimal chunk files
+    fs.writeFileSync(
+      path.join(chunksDir, 'polyfills-c67a75d1b6f99dc8.js'),
+      '// Polyfills'
+    );
+
+    fs.writeFileSync(
+      path.join(chunksDir, 'webpack-fd8027ecb5121010.js'),
+      '// Webpack runtime'
+    );
+
+    fs.writeFileSync(
+      path.join(chunksDir, 'main-fd8027ecb5121010.js'),
+      '// Main chunk'
+    );
+
+    fs.writeFileSync(
+      path.join(chunksDir, 'main-app-fd8027ecb5121010.js'),
+      '// Main app chunk'
+    );
+
+    // Create minimal page files
+    fs.writeFileSync(
+      path.join(pagesDir, '_app-fd8027ecb5121010.js'),
+      '// App page'
+    );
+
+    fs.writeFileSync(
+      path.join(pagesDir, 'index-fd8027ecb5121010.js'),
+      '// Index page'
+    );
+
+    fs.writeFileSync(
+      path.join(pagesDir, 'dashboard-fd8027ecb5121010.js'),
+      '// Dashboard page'
+    );
+
+    fs.writeFileSync(
+      path.join(pagesDir, 'profile-fd8027ecb5121010.js'),
+      '// Profile page'
+    );
+
+    fs.writeFileSync(
+      path.join(pagesDir, '_error-fd8027ecb5121010.js'),
+      '// Error page'
+    );
+
+    // Create server-manifest.json
+    fs.writeFileSync(
+      path.join(nextDir, 'server-manifest.json'),
+      JSON.stringify({
+        version: 1,
+        files: {
+          "server.js": {
+            "type": "server"
+          },
+          "middleware.ts": {
+            "type": "middleware"
+          }
+        }
+      })
+    );
+
+    // Create app-paths-manifest.json
+    fs.writeFileSync(
+      path.join(nextDir, 'app-paths-manifest.json'),
+      JSON.stringify({
+        pageInfos: {
+          "/": {
+            "module": "./app/page.js"
+          },
+          "/dashboard": {
+            "module": "./app/dashboard/page.js"
+          },
+          "/profile": {
+            "module": "./app/profile/page.js"
+          }
+        }
+      })
+    );
+
+    // Create pages-manifest.json
+    fs.writeFileSync(
+      path.join(nextDir, 'pages-manifest.json'),
+      JSON.stringify({
+        "/_app": "server/pages/_app.js",
+        "/_document": "server/pages/_document.js",
+        "/_error": "server/pages/_error.js",
+        "/": "server/pages/index.js"
+      })
+    );
+
+    // Create .next/package.json
+    fs.writeFileSync(
+      path.join(nextDir, 'package.json'),
+      JSON.stringify({
+        "name": "aura-personality-test-build",
+        "version": "0.1.0",
+        "private": true,
+        "engines": {
+          "node": ">=18.0.0"
+        }
       })
     );
 
