@@ -14,6 +14,14 @@ function log(message) {
   console.log(`[${new Date().toISOString()}] ${message}`);
 }
 
+// Safe JSON stringify function to handle undefined values
+function safeJsonStringify(obj) {
+  return JSON.stringify(obj, (key, value) => {
+    // Replace undefined values with null to avoid errors
+    return value === undefined ? null : value;
+  });
+}
+
 // Main function
 async function main() {
   try {
@@ -109,7 +117,7 @@ async function main() {
     // Create a minimal next-config.json
     fs.writeFileSync(
       path.join(nextDir, 'next-config.json'),
-      JSON.stringify({
+      safeJsonStringify({
         appDir: true,
         reactStrictMode: true,
         trailingSlash: false,
@@ -120,7 +128,7 @@ async function main() {
     // Create a required.js manifest
     fs.writeFileSync(
       path.join(nextDir, 'required-server-files.json'),
-      JSON.stringify({
+      safeJsonStringify({
         version: 1,
         config: {
           appDir: true,
@@ -144,7 +152,7 @@ async function main() {
     // Create routes-manifest.json
     fs.writeFileSync(
       path.join(nextDir, 'routes-manifest.json'),
-      JSON.stringify({
+      safeJsonStringify({
         version: 3,
         pages404: true,
         basePath: "",
@@ -217,7 +225,7 @@ async function main() {
     // Create prerender-manifest.json
     fs.writeFileSync(
       path.join(nextDir, 'prerender-manifest.json'),
-      JSON.stringify({
+      safeJsonStringify({
         version: 4,
         routes: {},
         dynamicRoutes: {},
@@ -233,7 +241,7 @@ async function main() {
     // Create build-manifest.json with more complete information
     fs.writeFileSync(
       path.join(nextDir, 'build-manifest.json'),
-      JSON.stringify({
+      safeJsonStringify({
         polyfillFiles: [
           "static/chunks/polyfills-c67a75d1b6f99dc8.js"
         ],
@@ -360,7 +368,7 @@ async function main() {
     // Create server-manifest.json
     fs.writeFileSync(
       path.join(nextDir, 'server-manifest.json'),
-      JSON.stringify({
+      safeJsonStringify({
         version: 1,
         files: {
           "server.js": {
@@ -376,7 +384,7 @@ async function main() {
     // Create app-paths-manifest.json
     fs.writeFileSync(
       path.join(nextDir, 'app-paths-manifest.json'),
-      JSON.stringify({
+      safeJsonStringify({
         pageInfos: {
           "/": {
             "module": "./app/page.js"
@@ -394,7 +402,7 @@ async function main() {
     // Create pages-manifest.json
     fs.writeFileSync(
       path.join(nextDir, 'pages-manifest.json'),
-      JSON.stringify({
+      safeJsonStringify({
         "/_app": "server/pages/_app.js",
         "/_document": "server/pages/_document.js",
         "/_error": "server/pages/_error.js",
@@ -405,7 +413,7 @@ async function main() {
     // Create .next/package.json
     fs.writeFileSync(
       path.join(nextDir, 'package.json'),
-      JSON.stringify({
+      safeJsonStringify({
         "name": "aura-personality-test-build",
         "version": "0.1.0",
         "private": true,
@@ -428,4 +436,7 @@ async function main() {
 }
 
 // Run the script
-main();
+main().catch(error => {
+  console.error('Unhandled error in main function:', error);
+  process.exit(1);
+});

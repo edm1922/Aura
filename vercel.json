@@ -5,7 +5,10 @@
   "installCommand": "npm install --legacy-peer-deps",
   "framework": "nextjs",
   "regions": ["iad1"],
-  "env": {},
+  "env": {
+    "NODE_ENV": "production",
+    "VERCEL_ENV": "production"
+  },
   "headers": [
     {
       "source": "/(.*)",
