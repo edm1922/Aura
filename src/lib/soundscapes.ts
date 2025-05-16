@@ -307,7 +307,8 @@ export function generateSoundscape(traits: PersonalityTraits): Soundscape {
     console.log('Dominant trait detected:', dominantTrait);
 
     // If there's a clear dominant trait, use its base soundscape
-    if (dominantTrait && traits[dominantTrait] >= 3.5) {
+    if (dominantTrait && traits[dominantTrait as keyof PersonalityTraits] !== undefined &&
+        traits[dominantTrait as keyof PersonalityTraits]! >= 3.5) {
       // Make sure the trait exists in our soundscapes
       if (traitSoundscapes[dominantTrait]) {
         console.log(`Using ${dominantTrait} soundscape`);
@@ -552,7 +553,7 @@ export function getPlaceholderSounds(): Record<string, string> {
       if (typeof prop === 'string') {
         // If the key exists in our map, return it
         if (prop in target) {
-          return target[prop];
+          return target[prop as keyof typeof target];
         }
 
         // Try to map it to a reliable source

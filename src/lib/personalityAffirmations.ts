@@ -52,7 +52,7 @@ const traitAffirmations = {
       "I find comfort and strength in established routines."
     ]
   },
-  
+
   // Conscientiousness affirmations
   conscientiousness: {
     high: [
@@ -92,7 +92,7 @@ const traitAffirmations = {
       "I find unique solutions by thinking outside conventional structures."
     ]
   },
-  
+
   // Extraversion affirmations
   extraversion: {
     high: [
@@ -132,7 +132,7 @@ const traitAffirmations = {
       "My self-sufficiency is a source of strength."
     ]
   },
-  
+
   // Agreeableness affirmations
   agreeableness: {
     high: [
@@ -172,7 +172,7 @@ const traitAffirmations = {
       "I make decisions based on principles rather than popularity."
     ]
   },
-  
+
   // Neuroticism (emotional stability) affirmations
   neuroticism: {
     high: [
@@ -230,12 +230,16 @@ function getRandomAffirmation(affirmations: string[]): string {
 // Generate an affirmation based on a specific trait
 export function generateTraitAffirmation(trait: string, score: number): string {
   const traitName = trait.toLowerCase();
-  if (!traitAffirmations[traitName]) {
+
+  // Use type assertion to check if the trait exists in our affirmations
+  if (!Object.prototype.hasOwnProperty.call(traitAffirmations, traitName)) {
     return "I embrace my unique personality and strengths.";
   }
-  
+
+  // Use type assertion to safely access the trait
+  const traitAffirmation = traitAffirmations[traitName as keyof typeof traitAffirmations];
   const level = getTraitLevel(score);
-  return getRandomAffirmation(traitAffirmations[traitName][level]);
+  return getRandomAffirmation(traitAffirmation[level]);
 }
 
 // Generate a daily affirmation based on personality traits
@@ -243,26 +247,26 @@ export function generateDailyAffirmation(traits: PersonalityTraits): string {
   if (!traits || Object.keys(traits).length === 0) {
     return "I embrace my unique qualities and continue to grow each day.";
   }
-  
+
   // Get a random trait to focus on for today's affirmation
   const traitEntries = Object.entries(traits);
   const randomIndex = Math.floor(Math.random() * traitEntries.length);
   const [trait, score] = traitEntries[randomIndex];
-  
+
   return generateTraitAffirmation(trait, score);
 }
 
 // Generate a set of affirmations for all traits
 export function generateAllTraitAffirmations(traits: PersonalityTraits): Record<string, string> {
   const affirmations: Record<string, string> = {};
-  
+
   if (!traits || Object.keys(traits).length === 0) {
     return affirmations;
   }
-  
+
   Object.entries(traits).forEach(([trait, score]) => {
     affirmations[trait] = generateTraitAffirmation(trait, score);
   });
-  
+
   return affirmations;
 }

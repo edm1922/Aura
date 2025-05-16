@@ -39,7 +39,13 @@ const getTraitColor = (trait: number, baseHue: number, alpha: number = 1): strin
 
 // Main component
 export default function AuraOrb3D({
-  traits = {},
+  traits = {
+    openness: 3,
+    conscientiousness: 3,
+    extraversion: 3,
+    agreeableness: 3,
+    neuroticism: 3
+  },
   size = 'md',
   animated = true,
   className = '',

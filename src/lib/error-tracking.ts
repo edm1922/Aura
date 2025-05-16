@@ -180,7 +180,7 @@ export const initErrorTracking = (): void => {
 
       // Track API errors (4xx and 5xx responses)
       if (!response.ok && (response.status >= 400)) {
-        const url = typeof input === 'string' ? input : input.url;
+        const url = typeof input === 'string' ? input : (input instanceof Request ? input.url : input.toString());
         logError(
           `API Error: ${response.status} ${response.statusText}`,
           {
@@ -197,7 +197,7 @@ export const initErrorTracking = (): void => {
       return response;
     } catch (error) {
       // Track network failures
-      const url = typeof input === 'string' ? input : input.url;
+      const url = typeof input === 'string' ? input : (input instanceof Request ? input.url : input.toString());
       logError(
         error as Error,
         {

@@ -14,7 +14,7 @@ interface PersonalityTraits {
 // Get time-based greeting (Good morning, afternoon, evening)
 export function getTimeBasedGreeting(): string {
   const hour = new Date().getHours();
-  
+
   if (hour < 12) {
     return 'Good morning';
   } else if (hour < 18) {
@@ -27,7 +27,7 @@ export function getTimeBasedGreeting(): string {
 // Get day of week greeting variation
 export function getDayBasedGreeting(): string {
   const day = new Date().getDay();
-  
+
   switch (day) {
     case 0: // Sunday
       return 'Happy Sunday';
@@ -47,13 +47,13 @@ export function getDominantTrait(traits: PersonalityTraits): string | null {
   if (!traits || Object.keys(traits).length === 0) {
     return null;
   }
-  
+
   const entries = Object.entries(traits);
   if (entries.length === 0) return null;
-  
+
   // Sort traits by score (highest first)
   const sortedTraits = entries.sort((a, b) => b[1] - a[1]);
-  
+
   // Return the name of the highest trait
   return sortedTraits[0][0];
 }
@@ -63,22 +63,22 @@ export function getSecondaryTrait(traits: PersonalityTraits): string | null {
   if (!traits || Object.keys(traits).length < 2) {
     return null;
   }
-  
+
   const entries = Object.entries(traits);
   if (entries.length < 2) return null;
-  
+
   // Sort traits by score (highest first)
   const sortedTraits = entries.sort((a, b) => b[1] - a[1]);
-  
+
   // Return the name of the second highest trait
   return sortedTraits[1][0];
 }
 
 // Generate trait-specific greeting addition
-export function getTraitBasedGreeting(trait: string, score: number): string {
+export function getTraitBasedGreeting(trait: string, score: number): string[] {
   // Only add trait-specific greeting for strong traits (score >= 4)
-  if (score < 4) return '';
-  
+  if (score < 4) return [];
+
   switch (trait) {
     case 'openness':
       return [
@@ -117,7 +117,7 @@ export function getTraitBasedGreeting(trait: string, score: number): string {
         'Remember to breathe and center yourself today.',
       ];
     default:
-      return '';
+      return [];
   }
 }
 
@@ -135,17 +135,19 @@ export function generatePersonalizedGreeting(
 ): string {
   // Start with time-based greeting
   let greeting = getTimeBasedGreeting();
-  
+
   // Add name
   greeting += `, ${name}`;
-  
+
   // If we have traits data, personalize further
   if (traits && Object.keys(traits).length > 0) {
     const dominantTrait = getDominantTrait(traits);
-    
-    if (dominantTrait && traits[dominantTrait] >= 4) {
+
+    if (dominantTrait && traits[dominantTrait as keyof PersonalityTraits] !== undefined &&
+        traits[dominantTrait as keyof PersonalityTraits]! >= 4) {
       // Add trait-specific greeting for strong dominant traits
-      const traitGreetings = getTraitBasedGreeting(dominantTrait, traits[dominantTrait]);
+      const traitScore = traits[dominantTrait as keyof PersonalityTraits]!;
+      const traitGreetings = getTraitBasedGreeting(dominantTrait, traitScore);
       if (traitGreetings.length > 0) {
         greeting += `. ${getRandomGreeting(traitGreetings)}`;
       }
@@ -167,7 +169,7 @@ export function generatePersonalizedGreeting(
       greeting += '!';
     }
   }
-  
+
   return greeting;
 }
 
@@ -176,12 +178,12 @@ export function generateMoodBasedSuggestion(
   traits?: PersonalityTraits
 ): string {
   if (!traits) return '';
-  
+
   const dominantTrait = getDominantTrait(traits);
   const secondaryTrait = getSecondaryTrait(traits);
-  
+
   if (!dominantTrait) return '';
-  
+
   // Suggestions based on dominant trait
   const suggestions = {
     openness: [
@@ -215,7 +217,7 @@ export function generateMoodBasedSuggestion(
       'A short walk might help clear your mind if things feel overwhelming.',
     ],
   };
-  
+
   // Get random suggestion based on dominant trait
-  return getRandomGreeting(suggestions[dominantTrait]);
+  return getRandomGreeting(suggestions[dominantTrait as keyof typeof suggestions]);
 }

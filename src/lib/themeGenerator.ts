@@ -122,18 +122,18 @@ export function getDominantTrait(traits: PersonalityTraits): string | null {
   if (!traits || Object.keys(traits).length === 0) {
     return null;
   }
-  
+
   const entries = Object.entries(traits);
   if (entries.length === 0) return null;
-  
+
   // Sort traits by score (highest first)
   const sortedTraits = entries.sort((a, b) => b[1] - a[1]);
-  
+
   // Check if the highest trait is significantly higher than the second (by at least 0.5)
   if (sortedTraits.length > 1 && sortedTraits[0][1] - sortedTraits[1][1] >= 0.5) {
     return sortedTraits[0][0];
   }
-  
+
   // If no clear dominant trait, return null
   return null;
 }
@@ -143,13 +143,13 @@ export function getSecondaryTrait(traits: PersonalityTraits): string | null {
   if (!traits || Object.keys(traits).length < 2) {
     return null;
   }
-  
+
   const entries = Object.entries(traits);
   if (entries.length < 2) return null;
-  
+
   // Sort traits by score (highest first)
   const sortedTraits = entries.sort((a, b) => b[1] - a[1]);
-  
+
   // Return the name of the second highest trait
   return sortedTraits[1][0];
 }
@@ -163,7 +163,7 @@ function blendColors(color1: string, color2: string, ratio: number = 0.5): strin
     const b = parseInt(hex.slice(5, 7), 16);
     return [r, g, b];
   };
-  
+
   // Convert RGB to hex
   const rgbToHex = (r: number, g: number, b: number) => {
     return '#' + [r, g, b].map(x => {
@@ -171,15 +171,15 @@ function blendColors(color1: string, color2: string, ratio: number = 0.5): strin
       return hex.length === 1 ? '0' + hex : hex;
     }).join('');
   };
-  
+
   // Blend the colors
   const rgb1 = hexToRgb(color1);
   const rgb2 = hexToRgb(color2);
-  
+
   const blended = rgb1.map((channel, i) => {
     return channel * (1 - ratio) + rgb2[i] * ratio;
   });
-  
+
   return rgbToHex(blended[0], blended[1], blended[2]);
 }
 
@@ -188,30 +188,31 @@ export function generateTheme(traits: PersonalityTraits): Theme {
   if (!traits || Object.keys(traits).length === 0) {
     return balancedTheme;
   }
-  
+
   const dominantTrait = getDominantTrait(traits);
-  
+
   // If there's a clear dominant trait, use its base theme
-  if (dominantTrait && traits[dominantTrait] >= 3.5) {
+  if (dominantTrait && traits[dominantTrait as keyof PersonalityTraits] !== undefined &&
+      traits[dominantTrait as keyof PersonalityTraits]! >= 3.5) {
     return traitBaseThemes[dominantTrait];
   }
-  
+
   // If no clear dominant trait, blend the top two traits
   const sortedTraits = Object.entries(traits).sort((a, b) => b[1] - a[1]);
-  
+
   if (sortedTraits.length >= 2) {
     const trait1 = sortedTraits[0][0];
     const trait2 = sortedTraits[1][0];
     const score1 = sortedTraits[0][1];
     const score2 = sortedTraits[1][1];
-    
+
     // Calculate blend ratio based on relative scores
     const totalScore = score1 + score2;
     const ratio = score2 / totalScore;
-    
+
     const theme1 = traitBaseThemes[trait1];
     const theme2 = traitBaseThemes[trait2];
-    
+
     // Create a blended theme
     return {
       name: `${theme1.name.split(' ')[0]} ${theme2.name.split(' ')[1]}`,
@@ -228,7 +229,7 @@ export function generateTheme(traits: PersonalityTraits): Theme {
       },
     };
   }
-  
+
   // Fallback to balanced theme
   return balancedTheme;
 }
