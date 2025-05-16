@@ -3,10 +3,8 @@ import type { NextRequest } from 'next/server';
 
 // This middleware ensures all API routes are treated as dynamic
 export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
-
-  // For API routes, ensure they're treated as dynamic
-  if (pathname.startsWith('/api/')) {
+  // Only apply special handling to API routes
+  if (request.nextUrl.pathname.startsWith('/api/')) {
     // Create a response with appropriate headers
     const response = NextResponse.next();
 
@@ -14,7 +12,6 @@ export function middleware(request: NextRequest) {
     response.headers.set('Cache-Control', 'no-store, max-age=0');
     response.headers.set('Pragma', 'no-cache');
     response.headers.set('Expires', '0');
-    response.headers.set('X-Middleware-Cache', 'no-cache');
 
     return response;
   }
@@ -23,12 +20,10 @@ export function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-// Configure the middleware to run on specific paths
+// Configure the middleware to run only on API routes
 export const config = {
   matcher: [
     // Match all API routes
     '/api/:path*',
-    // Match all pages that need dynamic behavior
-    '/((?!_next/static|_next/image|favicon.ico|images).*)',
   ],
 };

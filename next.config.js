@@ -13,6 +13,7 @@ const nextConfig = {
         hostname: '**',
       },
     ],
+    domains: ['lh3.googleusercontent.com', 'avatars.githubusercontent.com'],
   },
 
   // Optimize build output
@@ -23,10 +24,6 @@ const nextConfig = {
   },
 
   // Improve performance with HTTP/2 server push
-  experimental: {
-    optimizeCss: true,
-    scrollRestoration: true,
-  },
 
   // Optimize for production
   productionBrowserSourceMaps: false,
@@ -37,6 +34,11 @@ const nextConfig = {
   // Handle redirects if needed
   async redirects() {
     return [
+      {
+        source: '/test',
+        destination: '/test/adaptive',
+        permanent: true,
+      },
       // Add any redirects here if needed
     ];
   },
@@ -50,7 +52,7 @@ const nextConfig = {
   // Explicitly set that we're not using static exports
   trailingSlash: false,
 
-  // Experimental features
+  // Experimental features - only define once
   experimental: {
     optimizeCss: true,
     scrollRestoration: true,
@@ -66,11 +68,18 @@ const nextConfig = {
             key: 'Cache-Control',
             value: 'no-store, max-age=0',
           },
+          {
+            key: 'Pragma',
+            value: 'no-cache',
+          },
+          {
+            key: 'Expires',
+            value: '0',
+          },
         ],
       },
     ];
   },
-
 
 }
 
