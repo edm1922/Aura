@@ -1,0 +1,47 @@
+# Ignore development files
+.git
+.github
+.husky
+.vscode
+.env.local
+.env.development
+.env.development.local
+
+# Ignore test files
+__tests__
+*.test.js
+*.test.ts
+*.test.tsx
+*.spec.js
+*.spec.ts
+*.spec.tsx
+
+# Ignore build artifacts
+node_modules
+.next
+out
+build
+dist
+
+# Ignore documentation
+README.md
+CONTRIBUTING.md
+LICENSE
+*.md
+
+# Ignore configuration files
+.eslintrc.json
+.prettierrc
+.prettierignore
+.gitignore
+tsconfig.tsbuildinfo
+
+# Keep essential files
+!.env
+!.env.production
+!vercel.json
+!next.config.js
+!package.json
+!package-lock.json
+!tsconfig.json
+!prisma/schema.prisma

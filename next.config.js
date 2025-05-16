@@ -41,13 +41,14 @@ const nextConfig = {
     ];
   },
 
-  // Disable static generation for routes that use dynamic features
+  // Configure for Vercel deployment
   output: 'standalone',
 
-  // Configure which pages should not be statically generated
-  unstable_excludeFiles: [
-    '**/**/api/**/*.js', // Exclude API routes from static generation
-  ],
+  // Disable static generation completely
+  staticPageGenerationTimeout: 1000,
+
+  // Explicitly set that we're not using static exports
+  trailingSlash: false,
 
 
 }
