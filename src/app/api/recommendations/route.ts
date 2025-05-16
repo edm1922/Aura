@@ -78,15 +78,15 @@ export async function GET(request: NextRequest) {
         getMockRecommendations() // Use mock recommendations as fallback
       );
 
-      return NextResponse.json({
-        recommendations,
-        // Add cache control headers to prevent stale data
-        headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache',
-          'Expires': '0'
-        }
-      });
+      // Create response with recommendations
+      const response = NextResponse.json({ recommendations });
+
+      // Add cache control headers directly to the response object
+      response.headers.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+      response.headers.set('Pragma', 'no-cache');
+      response.headers.set('Expires', '0');
+
+      return response;
     } catch (error) {
       const dbError = error as Error;
       console.error('Database error fetching data for recommendations:', dbError);

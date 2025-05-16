@@ -50,15 +50,25 @@ const nextConfig = {
   // Explicitly set that we're not using static exports
   trailingSlash: false,
 
-  // Disable static optimization for all pages
+  // Experimental features
   experimental: {
-    // Existing experimental features
     optimizeCss: true,
     scrollRestoration: true,
+  },
 
-    // Disable static generation
-    isrMemoryCacheSize: 0,
-    serverActions: true,
+  // Disable static generation for API routes
+  async headers() {
+    return [
+      {
+        source: '/api/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'no-store, max-age=0',
+          },
+        ],
+      },
+    ];
   },
 
 
